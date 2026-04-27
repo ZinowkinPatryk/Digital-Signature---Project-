@@ -33,4 +33,4 @@ def encryption_hash(hash_code, keyPath=''):
 
 
 if __name__ == "__main__":
-    hashing("/Digital-Signature---Project-/test.txt")
+    hashing("test.txt", "privateKey.pem")

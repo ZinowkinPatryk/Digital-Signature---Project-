@@ -1,17 +1,21 @@
+from Crypto.PublicKey import ECC
 from Crypto.Hash import SHA256
-from Crypto.PublicKey import RSA
-from Crypto.Signature import PKCS1_v1_5
+from Crypto.Protocol.KDF import scrypt
 
-secret_code = "Unguessable"
-key = RSA.generate(2048)
-encrypted_key = key.export_key(passphrase=secret_code, pkcs=1, prot_params={'iteration_count':131072})
+# 1. Nasze hasło źródłowe (seed)
+haslo = b"Moje_super_tajne_zdanie_z_ktorego_powstanie_klucz"
 
-with open("rsa_key.pem", "wb") as f:
-    f.write(encrypted_key)
+# 2. Bezpieczna derywacja klucza (zamiana hasła na 32 bajty)
+# Używamy scrypt, aby zabezpieczyć się przed atakami brute-force
+seed_32_bytes = scrypt(haslo, salt=b'stala_sol_aplikacji', key_len=32, N=2**14, r=8, p=1)
 
-print(key.publickey().exportKey())
+# 3. Konwersja bajtów na dużą liczbę całkowitą (wymóg algorytmu ECC)
+d_int = int.from_bytes(seed_32_bytes, byteorder='big')
 
-with open("test1.txt", "rb") as f:
-    test = SHA256.new(f.read())
-    print(test.hexdigest())
+# 4. Ręczne skonstruowanie klucza prywatnego ECDSA (krzywa P-256)
+private_key = ECC.construct(curve='P-256', d=d_int)
+public_key = private_key.public_key()
+
+print("Klucz prywatny został odtworzony z hasła!")
+print(f"Klucz publiczny (hex): {public_key.export_key(format='SEC1').hex()[:60]}...")
 

@@ -3,19 +3,18 @@ from Crypto.PublicKey import RSA, ECC
 from Crypto.Signature import pkcs1_15
 from Crypto.Signature import DSS
 
-
-def hashing_txt(filepath="", keyPath=''):
+def hashing_file(filepath="", keyPath=''):
     with open(filepath, "rb") as f:
         hash_code = SHA256.new(f.read())
         try:
-            signature = encryption_hash_txt(hash_code, keyPath)
+            signature = encryption_hash_file(hash_code, keyPath)
             with open(filepath +".sig", "wb") as f_sig:
                 f_sig.write(signature)
         except Exception as e:
             raise ValueError(f"Signature went wrong -> {e}")
 
 
-def encryption_hash_txt(hash_code, keyPath=''):
+def encryption_hash_file(hash_code, keyPath=''):
     with open(keyPath, "rb") as f:
         key = f.read()
     signer = None
@@ -30,12 +29,6 @@ def encryption_hash_txt(hash_code, keyPath=''):
             raise ValueError("Invalid key file")
     return signer.sign(hash_code)
 
-def encryption_hash_pdf():
-    pass
-
-def hashing_pdf():
-    pass
-
 
 if __name__ == "__main__":
-    hashing_txt("test.txt", "privateKey.pem")
+    hashing("test.txt", "privateKey.pem")

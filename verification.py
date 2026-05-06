@@ -6,15 +6,12 @@ from Crypto.Signature import pkcs1_15
 from Crypto.Signature import DSS
 
 # kolejnosc:
-# plik txt:
+# plik txt i pdf:
 # 1. sciezka do pliku, 2. plik .sig, 3. klucz publiczny , 4. klucz publiczny od nas (ApplicationPublicKey.pem)
-# plik pdf:
 
 
 def verify_file(*args):
-    if ".pdf" in args[0]:
-        print("t")
-    elif ".txt" in args[0]:
+    if ".txt" in args[0] or ".pdf" in args[0]:
         try:
             with open(args[0], "rb") as f_file:
                 hash_code = SHA256.new(f_file.read())

@@ -3,7 +3,7 @@ import base64
 from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
-
+from pathlib import Path
 
 def createCertificate(user_public_key):
     with open("ApplicationPrivateKey.pem", "rb") as f:
@@ -22,7 +22,10 @@ def createCertificate(user_public_key):
         "data": cert_data,
         "signature": base64.b64encode(signature).decode('utf-8')
     }
-    with open("publicKey.pem", "w") as f:
+    ssh_dir = Path.home () / ".ssh"
+    ssh_dir.mkdir (parents=True, exist_ok=True)
+    cert_path = ssh_dir / "publicKey.json"
+    with open(cert_path, "w") as f:
         json.dump(certificate, f, indent=4)
 
 

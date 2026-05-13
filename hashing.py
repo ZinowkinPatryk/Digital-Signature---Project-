@@ -31,4 +31,4 @@ def encryption_hash_file(hash_code, keyPath=''):
 
 
 if __name__ == "__main__":
-    hashing("test.txt", "privateKey.pem")
+    hashing_file("test.txt", "privateKey.pem")

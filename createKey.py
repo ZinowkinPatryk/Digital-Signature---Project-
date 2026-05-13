@@ -2,11 +2,11 @@ from Crypto.PublicKey import RSA
 from Crypto.PublicKey import ECC
 from certificate import createCertificate
 from pathlib import Path
-
+import datetime
 def createKey(algoritmChoosen="rsa"):
-    ssh_dir = Path.home() / ".shh"
+    ssh_dir = Path.home() / ".ssh"
     ssh_dir.mkdir(parents=True, exist_ok=True)
-    privateKey_path = ssh_dir / "privateKey.pem"
+    privateKey_path = ssh_dir / f"privateKey{datetime.datetime.now()}.pem"
     match algoritmChoosen:
         case 'rsa':
             key = RSA.generate(2048) # mozna wspomniec o passphrase

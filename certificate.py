@@ -4,7 +4,7 @@ from Crypto.PublicKey import RSA
 from Crypto.Signature import pkcs1_15
 from Crypto.Hash import SHA256
 from pathlib import Path
-
+import datetime
 def createCertificate(user_public_key):
     with open("ApplicationPrivateKey.pem", "rb") as f:
         app_private_key = RSA.import_key(f.read(), passphrase="m;QwAzzp<&RKf!41j5#")
@@ -24,7 +24,7 @@ def createCertificate(user_public_key):
     }
     ssh_dir = Path.home () / ".ssh"
     ssh_dir.mkdir (parents=True, exist_ok=True)
-    cert_path = ssh_dir / "publicKey.json"
+    cert_path = ssh_dir / f"publicKey{datetime.datetime.now()}.json"
     with open(cert_path, "w") as f:
         json.dump(certificate, f, indent=4)
 
